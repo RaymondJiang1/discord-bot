@@ -11,6 +11,7 @@ module.exports = class extends Command {
 			aliases: ['info', 'bot'],
 			description: 'Displays information about the bot.',
 			category: 'Information',
+			usage: '!botinfo',
 		});
 	}
 

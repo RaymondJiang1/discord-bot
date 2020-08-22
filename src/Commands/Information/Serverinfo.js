@@ -39,6 +39,7 @@ module.exports = class extends Command {
 			description:
 				'Displays information about the server that said message was run in.',
 			category: 'Information',
+			usage: '!serverinfo',
 		});
 	}
 

@@ -25,7 +25,7 @@ module.exports = class extends Command {
 			description:
 				'Displays information about a provided user or the message author.',
 			category: 'Information',
-			usage: '[user]',
+			usage: '!userinfo [user]',
 		});
 	}
 

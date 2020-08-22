@@ -12,42 +12,11 @@ module.exports = class DiscordBotClient extends Client {
 
 		this.aliases = new Collection();
 
+		this.events = new Collection();
+
 		this.utils = new Util(this);
 
-		this.once('ready', () => {
-			console.log(`Logged in as ${this.user.username}!`);
-		});
-
-		this.on('message', async (message) => {
-			const mentionRegex = RegExp(`^<@!${this.user.id}>$`);
-			const mentionRegexPrefix = RegExp(`^<@!${this.user.id}> `);
-
-			if (!message.guild || message.author.bot) return;
-
-			if (message.content.match(mentionRegex))
-				message.channel.send(
-					`My prefix for ${message.guild.name} is \`${this.prefix}\`.`
-				);
-
-			const prefix = message.content.match(mentionRegexPrefix)
-				? message.content.match(mentionRegexPrefix)[0]
-				: this.prefix;
-
-			if (!message.content.startsWith(prefix)) return;
-
-			// eslint-disable-next-line no-unused-vars
-			const [cmd, ...args] = message.content
-				.slice(prefix.length)
-				.trim()
-				.split(/ +/g);
-
-			const command =
-				this.commands.get(cmd.toLowerCase()) ||
-				this.commands.get(this.aliases.get(cmd.toLowerCase()));
-			if (command) {
-				command.run(message, args);
-			}
-		});
+		this.owners = []; //Put your id in here
 	}
 
 	validate(options) {
@@ -56,7 +25,7 @@ module.exports = class DiscordBotClient extends Client {
 
 		if (!options.bottoken)
 			throw new Error('You must pass the token for the client.');
-		this.bottoken = options.bottoken;
+		this.token = options.bottoken;
 
 		if (!options.prefix)
 			throw new Error('You must pass a prefix for the client.');
@@ -65,8 +34,9 @@ module.exports = class DiscordBotClient extends Client {
 		this.prefix = options.prefix;
 	}
 
-	async start(bottoken = this.bottoken) {
+	async start(token = this.bottoken) {
 		this.utils.loadCommands();
-		super.login(bottoken);
+		this.utils.loadEvents();
+		super.login(token);
 	}
 };
